@@ -80,36 +80,44 @@ function Filters(props) {
     <Theme>
       <Wrapper>
         <Input
-          label="Customer"
-          id="customer_filter"
-          type="text"
-          name="customer"
-          onChange={handlerFilter}
-          placeholder="Search customer..." source={'customers'} />
-        <Input
-          label="Order"
+          label="Ordine"
           id="order_filter"
           type="text"
           name="order"
           source={'orders'}
           onChange={handlerFilter}
-          placeholder="Search order..." />
+          placeholder="Ricerca ordine..." />
         <Input
-          label="Company"
+          label="Cliente"
+          id="customer_filter"
+          type="text"
+          name="customer"
+          onChange={handlerFilter}
+          placeholder="Ricerca cliente..." source={'customers'} />
+        <Input
+          label="Azienda"
           id="company_filter"
           type="text"
           name="company"
           source={'companies'}
           onChange={handlerFilter}
-          placeholder="Search company..." />
+          placeholder="Ricerca azienda..." />
         <Input
-          label="City"
+          label="Città"
           id="city_filter"
           type="text"
           name="city"
           source={'cities'}
           onChange={handlerFilter}
-          placeholder="Search city..." />
+          placeholder="Ricerca città..." />
+        <Input
+          label="Paese"
+          id="country_filter"
+          type="text"
+          name="country"
+          source={'countries'}
+          onChange={handlerFilter}
+          placeholder="Ricerca paese..." />
       </Wrapper>
       <ChipWrapper>
         {renderFilters()}
