@@ -50,7 +50,7 @@ const Header = (props) => {
 
   const changeHandler = (ev) => {
     setValue(ev.target.value);
-    fetch(`http://localhost:3200/autocomplete/${props.source}?q=${ev.target.value}`)
+    fetch(`${process.env.REACT_APP_API_HOST}/autocomplete/${props.source}?q=${ev.target.value}`)
       .then(response => response.json())
       .then(data => setSuggestions(data));
   }

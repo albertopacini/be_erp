@@ -48,7 +48,8 @@ const InfoBox = styled.div`
     text-align:left;
     font-size: 14px;    
   }
-  tr:nth-child(even) {
+
+  tbody tr:nth-child(odd) {
     background: #FFF
   }
 `;
@@ -67,7 +68,7 @@ const OrderItem = (props) => {
 
   useEffect(() => {
     active && !weather &&
-      fetch(`http://localhost:3200/weather?place=${props.shipping.city},${props.shipping.country}`)
+      fetch(`${process.env.REACT_APP_API_HOST}/weather?place=${props.shipping.city},${props.shipping.country}`)
         .then(response => response.json())
         .then(data => setWeather(data));
 

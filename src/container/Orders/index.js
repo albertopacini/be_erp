@@ -65,7 +65,7 @@ function Orders(props) {
   }
 
   const handlerLoadResults = useCallback(async (page, filters, replace = false) => {
-    fetch(`http://localhost:3200/orders?${formatFilterURI(page, filters)}`)
+    fetch(`${process.env.REACT_APP_API_HOST}/orders?${formatFilterURI(page, filters)}`)
       .then(response => response.json())
       .then(data => {
         setOrders(orders => (replace ? data.results : [...orders, ...data.results]));
