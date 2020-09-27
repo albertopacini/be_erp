@@ -1,0 +1,30 @@
+html,
+body {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0px;
+}
+
+
+.md-18 {
+  font-size: 18px;
+}
+
+
+.mt-2 {
+  margin: 2rem;
+}
+
+body {
+  padding: 0px;
+  margin: 0px;
+  font-family: 'Roboto', sans-serif;
+}
