@@ -28,14 +28,7 @@ const Button = (props) => {
     <StyledButton
       type={props.type}
       onClick={props.onClick}
-      width={props.width}
-      size={props.size}
-      color={props.color}
-      variant={props.variant}
       disabled={props.disabled}
-      className={props.className}
-      iconStart={props.iconStart}
-      iconEnd={props.iconEnd}
     >
       {Children.toArray(props.children)}
     </StyledButton>
@@ -46,6 +39,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.node,
   disabled: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 export default Button;
