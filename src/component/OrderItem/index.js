@@ -1,45 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import Weather from "../Weather";
+import PropTypes from 'prop-types';
 
 const Wrapper = styled.div`
-  margin: 10px 0px;
-`;
-const Row = styled.div`      
-  display:flex;    
-  padding: 0px;
-  justify-content:space-between;
-  box-shadow: 0px 0px 10px 0px rgba(170,170,170,0.5);
-  border-radius: 4px;
-  font-size:14px; 
-`;
-const Cell = styled.div`    
-  display: flex;
-  align-items: center; 
-  width: ${(props => props.width ? props.width : '20%')};
-  padding: 20px;
-  .material-icons {
-    margin-right: 5px;
-    color: #2f5c9c;
-  }`;
-
-const ActionCell = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;  
-  padding: 20px;
-  width: 5%;  
-  background: #eaeef5;
-  .material-icons {
-    margin-right: 5px;
-    color: #2f5c9c;
-  }`;
+  margin: 10px 0px;`;
 
 const InfoBox = styled.div`  
-  border: solid 1px #eaeef5;  
-  display: flex;    
+  border: solid 1px #eaeef5;    
   background: #eaeef5;
+  display: grid;
+  grid-gap: 10px 10px; 
+  box-shadow: 0px 0px 10px 0px rgba(170,170,170,0.5);
+  grid-template-columns: 1fr 1fr;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr
+  }  
   table {
     width:100%;
   }
@@ -51,20 +27,55 @@ const InfoBox = styled.div`
 
   tbody tr:nth-child(odd) {
     background: #FFF
-  }
+  }`;
+
+
+
+const Grid = styled.div`
+  width: 100%;  
+  display: grid;
+  grid-gap: 10px 10px; 
+  box-shadow: 0px 0px 10px 0px rgba(170,170,170,0.5);
+  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 1fr;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 2fr 1fr; 
+  }  
 `;
 
-const Col = styled.div`      
-  flex:1;  
-  background: ${(props) => props.background ? props.background : 'none'};
-  display:flex;
-`;
+
+const Col = styled.div`
+  width: 100%;  
+  display:flex;    
+  align-items: center;  
+  ${(props) => props.background ? `background:${props.background};` : ''}
+  ${(props) => props.padding ? `padding:${props.padding};` : ''}
+  @media (max-width: 1024px) {
+    justify-content: center;
+    ${(props) => props.mobileHidden ? 'display:none;' : ''}
+  }
+  .material-icons {
+    margin-right: 5px;
+    color: #2f5c9c;
+  }`;
+
+
+const ActionCol = styled.div`
+  background: #eaeef5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  .material-icons {
+    margin-right: 5px;
+    color: #2f5c9c;
+  }`;
 
 
 const OrderItem = (props) => {
 
   const [weather, setWeather] = useState(null);
   const [active, setActive] = useState(false);
+  const [cloning, setCloning] = useState(false);
 
   useEffect(() => {
     active && !weather &&
@@ -88,21 +99,42 @@ const OrderItem = (props) => {
       currency: 'EUR'
     }).format(value);
 
+  const cloneElement = async () => {
+    setCloning(true);
+    await props.onClone();
+    setCloning(false);
+  }
+
   return (
     <Wrapper>
-      <Row>
-        <ActionCell onClick={() => setActive(!active)} key={`order_${props.orderId}`}>
-          <span class="material-icons">{active ? 'expand_less' : 'expand_more'}</span>
-        </ActionCell>
-        <Cell width="10%"><span title="Id ordine" className="material-icons">qr_code</span> {props.orderId}</Cell>
-        <Cell width="15%"><span title="Data di creazione" className="material-icons">event_available</span> {dateFormat(props.orderDate)}</Cell>
-        <Cell><span title="Cliente" className="material-icons">contacts</span> {props.customer.name}</Cell>
-        <Cell><span title="Azienda" className="material-icons">business</span> {props.customer.company}</Cell>
-        <Cell><span title="Luogo spedizione" className="material-icons">local_shipping</span> {props.shipping.city}, {props.shipping.country}</Cell>
-        <ActionCell>
-          <span class="material-icons">content_copy</span>
-        </ActionCell>
-      </Row>
+      <Grid>
+        <ActionCol padding="20px" onClick={() => setActive(!active)} key={`order_${props.orderId}`}>
+          <span className="material-icons">{active ? 'expand_less' : 'expand_more'}</span>
+        </ActionCol>
+        <Col padding="20px 0px">
+          <span title="Id ordine" className="material-icons">qr_code</span>
+          {props.orderId}
+        </Col>
+        <Col padding="20px 0px" mobileHidden={true}>
+          <span title="Data di creazione" className="material-icons">event_available</span>
+          {dateFormat(props.orderDate)}
+        </Col>
+        <Col padding="20px 0px" mobileHidden={true}>
+          <span title="Cliente" className="material-icons">contacts</span>
+          {props.customer.name}
+        </Col>
+        <Col padding="20px 0px" mobileHidden={true}>
+          <span title="Azienda" className="material-icons">business</span>
+          {props.customer.company}
+        </Col>
+        <Col padding="20px 0px" mobileHidden={true}>
+          <span title="Luogo spedizione" className="material-icons">local_shipping</span>
+          {props.shipping.city}, {props.shipping.country}
+        </Col>
+        <ActionCol padding="20px" onClick={cloneElement}>
+          <span className="material-icons">{(cloning) ? 'hourglass_top' : 'content_copy'}</span>
+        </ActionCol>
+      </Grid>
       { active &&
         <InfoBox>
           <Col background="#fff">
@@ -147,6 +179,17 @@ const OrderItem = (props) => {
       }
     </Wrapper>
   );
+}
+
+OrderItem.propTypes = {
+  shipping: PropTypes.object,
+  amount: PropTypes.number,
+  unitPrice: PropTypes.number,
+  quantity: PropTypes.number,
+  summary: PropTypes.array,
+  width: PropTypes.string,
+  background: PropTypes.string,
+  onClone: PropTypes.func
 }
 
 export default React.memo(OrderItem);

@@ -7,7 +7,7 @@ const Wrapper = styled.img`
 `;
 
 const Header = (props) => {
-  return (<Wrapper src={Logo} alt={props.alt || 'TECH TEAM – Northwind Weather'}>{props.children}</Wrapper>);
+  return (<Wrapper src={Logo} alt={props.alt || 'Be demo'}>{props.children}</Wrapper>);
 }
 
 export default Header;

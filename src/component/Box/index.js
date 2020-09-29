@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   align-self: ${props => props.alignSelf};
   order: ${props => props.order};
   flex-basis: ${props => props.flexBasis};
+  margin: ${props => props.margin}
 `;
 
 const Box = (props) => {
@@ -29,6 +30,7 @@ const Box = (props) => {
     alignSelf={props.alignSelf}
     order={props.order}
     flexBasis={props.flexBasis}
+    margin={props.margin}
   >{Children.toArray(props.children)}</Wrapper>);
 }
 

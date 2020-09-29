@@ -1,37 +1,31 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import OrderItem from '../../component/OrderItem';
 import styled from "styled-components";
 
 const Wrapper = styled.div`  
   display: flex;
   flex-direction: column;  
-  height: 65vh;
+  height: 50vh;
   overflow: auto;
   border-bottom: solid 1px #eaeef5;
   border-top: solid 1px #eaeef5;
   padding:5px;  
-`;
+  margin-top: 10px;`;
 
 const InfiniteLoading = styled.div`
-  display: flex;      
-`;
+  display: flex;`;
 
 const Counter = styled.div`
   padding: 10px 0px; 
-  display: flex;      
-`;
+  display: flex;`;
 
-function Orders(props) {
-  const [orders, setOrders] = useState([]);
-  const [counter, setCounter] = useState(0);
-  const [orderForPage, setOrderForPage] = useState(30);
+function ItemsList(props) {
   const [loadingRef, setLoadingRef] = useState();
   const [wrapperRef, setWrapperRef] = useState();
 
   const prevY = useRef(0);
-  const page = useRef(1);
+  const page = useRef(props.page);
   const filters = useRef(props.filters);
-
   const observer = useRef((root) => {
     return new IntersectionObserver(
       (entities) => {
@@ -49,33 +43,9 @@ function Orders(props) {
     )
   });
 
-  const formatFilterURI = (page, filters) => {
-    let qs = [
-      `page=${page}`,
-      `rows=${orderForPage}`
-    ];
-    for (let key in filters) {
-      const values = filters[key].map(i => i.value && i.value);
-      if (values.length) {
-        qs.push(`${key}=${values.join('|')}`);
-      }
-    }
-
-    return qs.join('&');
-  }
-
-  const handlerLoadResults = useCallback(async (page, filters, replace = false) => {
-    fetch(`${process.env.REACT_APP_API_HOST}/orders?${formatFilterURI(page, filters)}`)
-      .then(response => response.json())
-      .then(data => {
-        setOrders(orders => (replace ? data.results : [...orders, ...data.results]));
-        setCounter(data.count);
-      });
-  });
-
   const loadMore = () => {
     page.current++;
-    handlerLoadResults(page.current, filters.current);
+    props.loadItems(page.current, filters.current);
   }
 
   useEffect(() => {
@@ -88,14 +58,18 @@ function Orders(props) {
   useEffect(() => {
     page.current = 1;
     filters.current = props.filters;
-    handlerLoadResults(page.current, filters.current, true);
+    props.loadItems(page.current, filters.current, true);
   }, [props.filters]);
+
+  useEffect(() => {
+    page.current = props.page;
+  }, [props.page]);
 
 
   return (
     <React.Fragment>
       <Wrapper ref={wrapperRef => setWrapperRef(wrapperRef)}>
-        {Array.isArray(orders) && orders.map((v, i) => {
+        {Array.isArray(props.items) && props.items.map((v, i) => {
           return (
             <OrderItem
               key={`order_${v.orderId}`}
@@ -105,16 +79,17 @@ function Orders(props) {
               shipping={v.shipping}
               summary={v.summary}
               amount={v.amount}
+              onClone={() => props.cloneItem(v.orderId)}
             />
           );
         })}
         <InfiniteLoading ref={loadingRef => setLoadingRef(loadingRef)} />
       </Wrapper>
       <Counter>
-        <span> Records: {orders.length} di {counter} </span>
+        <span> Records: {props.items.length} di {props.totalSize} </span>
       </Counter>
     </React.Fragment>
   );
 }
 
-export default Orders;
+export default ItemsList;

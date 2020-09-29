@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from "styled-components";
+import PropTypes from 'prop-types';
 import Box from '../Box';
 
 const Wrapper = styled.div`      
   display:flex;
   flex-direction:column;  
   padding:20px;
-  min-width: 233px;
+  min-width: 233px;  
 `;
 
 const ForecastWrapper = styled.div`      
@@ -31,7 +32,7 @@ const Weather = (props) => {
       <Box flexDirection="column">
         <Box alignItems="center">
           {props.forecast.map((i, k) => (
-            <ForecastWrapper>
+            <ForecastWrapper key={`weather_day_${k}`}>
               <img width="64" alt="{i.day} condition" src={i.icon}></img>
               <h6>{i.day}</h6>
               <small>{i.temp.max} / {i.temp.min} °C</small>
@@ -42,5 +43,14 @@ const Weather = (props) => {
     </Wrapper>
   );
 }
+
+
+Weather.propTypes = {
+  icon: PropTypes.string,
+  place: PropTypes.string,
+  day: PropTypes.string,
+  temp: PropTypes.object,
+  forecast: PropTypes.array,
+};
 
 export default Weather;

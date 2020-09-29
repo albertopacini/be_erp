@@ -5,14 +5,23 @@ import styled from "styled-components";
 
 const StyledButton = styled.button`
   display: flex;
-  justify-content: center;
   align-items: center;
-  min-width: ${props => props.width};  
-  font-size: '1em';
-  padding: '1em';
-  border-radius: '4px';
+  border: solid 1px #2f5c9c;  
+  padding: 10px;  
+  border-radius: 4px;  
+  color: #2f5c9c;
+  background: none;
   cursor: pointer;
-  outline: none;`;
+  font-size: 14px;
+  .material-icons {
+    cursor: pointer;
+    margin-left: 10px;    
+  }
+  &:disabled {
+    color: #eaeef5;
+    border-color: #eaeef5;
+  }
+  `;
 
 const Button = (props) => {
   return (
@@ -30,35 +39,13 @@ const Button = (props) => {
     >
       {Children.toArray(props.children)}
     </StyledButton>
-
   );
 }
 
 Button.propTypes = {
-  type: PropTypes.string,
   onClick: PropTypes.func,
   children: PropTypes.node,
-  color: PropTypes.string,
-  variant: PropTypes.string,
   disabled: PropTypes.bool,
-  size: PropTypes.string,
-  className: PropTypes.string,
-  width: PropTypes.string,
-  iconStart: PropTypes.string,
-  iconEnd: PropTypes.string,
 };
-
-Button.defaultProps = {
-  type: 'button',
-  size: 'normal',
-  color: 'primary',
-  variant: 'normal',
-  disabled: false,
-};
-
-
-
-
-
 
 export default Button;

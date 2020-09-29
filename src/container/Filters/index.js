@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Theme from "../../Theme";
-import Input from '../../component/Input';
+import Autocomplete from '../../component/Autocomplete';
 import styled from "styled-components";
 
 
@@ -10,28 +9,36 @@ const ChipWrapper = styled.div`
   height: 40px;
   overflow: auto;
 `;
+
 const Wrapper = styled.div`    
-  display: flex;
-  div {    
-    margin-right: 20px;
-    &:first-child { 
-      margin-left: 0px;
-      
-    }
-    &:last-child { 
-      margin-right: 0px;
-    }
-  }
-  
-  
+  border-bottom: solid 1px #eaeef5;
+  margin-bottom: 10px;
 `;
+
+const InputGrid = styled.div`
+  width: 100%;
+  display: grid;
+  grid-gap: 10px 10px; 
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
+const Col = styled.div`
+  width: 100%;  
+  display:flex;  
+`;
+
 const Chip = styled.div`    
   display: flex;
   align-items: center;
-  border: solid 1px #2f5c9c;  
+  border: solid 1px #eaeef5;  
   padding: 10px;
-  margin-right: 5px;
-  display:flex;  
+  margin-right: 5px;   
   border-radius: 4px;  
   color: #2f5c9c;
   .material-icons {
@@ -77,52 +84,67 @@ function Filters(props) {
   }
 
   return (
-    <Theme>
-      <Wrapper>
-        <Input
-          label="Ordine"
-          id="order_filter"
-          type="text"
-          name="order"
-          source={'orders'}
-          onChange={handlerFilter}
-          placeholder="Ricerca ordine..." />
-        <Input
-          label="Cliente"
-          id="customer_filter"
-          type="text"
-          name="customer"
-          onChange={handlerFilter}
-          placeholder="Ricerca cliente..." source={'customers'} />
-        <Input
-          label="Azienda"
-          id="company_filter"
-          type="text"
-          name="company"
-          source={'companies'}
-          onChange={handlerFilter}
-          placeholder="Ricerca azienda..." />
-        <Input
-          label="Città"
-          id="city_filter"
-          type="text"
-          name="city"
-          source={'cities'}
-          onChange={handlerFilter}
-          placeholder="Ricerca città..." />
-        <Input
-          label="Paese"
-          id="country_filter"
-          type="text"
-          name="country"
-          source={'countries'}
-          onChange={handlerFilter}
-          placeholder="Ricerca paese..." />
-      </Wrapper>
+    <Wrapper>
+      <InputGrid>
+        <Col>
+          <Autocomplete
+            label="Ordine"
+            id="order_filter"
+            type="text"
+            autocomplete="off"
+            name="orf"
+            source={'orders'}
+            onChange={handlerFilter}
+            placeholder="Ricerca ordine..." />
+        </Col>
+        <Col>
+          <Autocomplete
+            label="Cliente"
+            id="customer_filter"
+            type="text"
+            name="cusf"
+            autocomplete="off"
+            onChange={handlerFilter}
+            placeholder="Ricerca cliente..." source={'customers'} />
+        </Col>
+        <Col>
+          <Autocomplete
+            label="Azienda"
+            id="company_filter"
+            type="text"
+            name="accf"
+            autocomplete="off"
+            source={'companies'}
+            onChange={handlerFilter}
+            placeholder="Ricerca azienda..." />
+        </Col>
+        <Col>
+          <Autocomplete
+            label="Città"
+            id="city_filter"
+            type="text"
+            name="cf"
+            autocomplete="be_demo"
+            source={'cities'}
+            onChange={handlerFilter}
+            placeholder="Ricerca città..." />
+        </Col>
+        <Col>
+          <Autocomplete
+            label="Paese"
+            id="country_filter"
+            type="text"
+            name="cof"
+            autocomplete="off"
+            source={'countries'}
+            onChange={handlerFilter}
+            placeholder="Ricerca paese..." />
+        </Col>
+      </InputGrid>
       <ChipWrapper>
         {renderFilters()}
       </ChipWrapper>
-    </Theme>
+    </Wrapper>
   );
 }
 
